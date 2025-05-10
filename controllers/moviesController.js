@@ -21,7 +21,7 @@ function index(req, res) {
 // Restituisce un singolo film con le sue recensioni
 function show(req, res) {
   const filmId = req.params.id;
-  const sqlFilm = 'SELECT * FROM films WHERE id = ?';
+  const sqlFilm = 'SELECT * FROM movies WHERE id = ?';
 
   connection.query(sqlFilm, [filmId], (err, films) => {
     if (err) {
@@ -33,7 +33,7 @@ function show(req, res) {
     }
 
     const movie = films[0];
-    const sqlReviews = 'SELECT * FROM reviews WHERE film_id = ?';
+    const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?';
 
     connection.query(sqlReviews, [filmId], (err2, reviews) => {
       if (err2) {
