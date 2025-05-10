@@ -3,10 +3,10 @@ const connection = require('../db');
 // Restituisce tutti i film con callback-style
 function index(req, res) {
   const sql = `
-    SELECT f.*, AVG(r.rating) AS average_rating
-    FROM films f
-    LEFT JOIN reviews r ON f.id = r.film_id
-    GROUP BY f.id
+    SELECT m.*, AVG(r.vote) AS average_rating
+    FROM movies m
+    LEFT JOIN reviews r ON m.id = r.movie_id
+    GROUP BY m.id
   `;
 
   connection.query(sql, (err, results) => {
