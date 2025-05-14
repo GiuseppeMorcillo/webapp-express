@@ -57,7 +57,6 @@ function show(req, res) {
 function addReview(req, res) {
     const filmId = req.params.id;
     const { name, vote, text } = req.body;
-    console.log(req.body)
     if (!name || !text || !vote) {
         return res.status(400).json({ error: 'Dati mancanti per la recensione' });
     }
