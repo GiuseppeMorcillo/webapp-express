@@ -8,7 +8,6 @@ function index(req, res) {
     LEFT JOIN reviews r ON m.id = r.movie_id
     GROUP BY m.id
   `;
-
     connection.query(sql, (err, results) => {
         if (err) {
             console.error('Errore nella query INDEX:', err);
@@ -25,8 +24,13 @@ function index(req, res) {
 // Restituisce un singolo film con le sue recensioni
 function show(req, res) {
     const filmId = req.params.id;
-    const sqlFilm = 'SELECT * FROM movies WHERE id = ?';
-
+    const sqlFilm = `
+    SELECT m.*, AVG(r.vote) AS average_rating
+    FROM movies m 
+    LEFT JOIN reviews r ON m.id = r.movie_id
+    WHERE m.id = ?
+    GROUP BY m.id
+  `;
     connection.query(sqlFilm, [filmId], (err, films) => {
         if (err) {
             console.error('Errore nella query SHOW film:', err);
@@ -35,7 +39,6 @@ function show(req, res) {
         if (films.length === 0) {
             return res.status(404).json({ error: 'Film non trovato' });
         }
-
         const movie = films[0];
         const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?';
         const imgMovie = {
