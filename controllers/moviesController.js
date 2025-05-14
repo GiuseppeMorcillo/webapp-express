@@ -16,9 +16,9 @@ function index(req, res) {
         }
         res.json(results.map(result => ({
             ...result,
-            image: process.env.PUBLIC_PATH + "movies_cover/" + result.title.toLowerCase() + ".jpg"
+            image: process.env.PUBLIC_PATH + "movies_cover/" + result.title.toLowerCase().replaceAll(' ', '_') + ".jpg"
         })))
-      
+
     });
 }
 
@@ -38,13 +38,16 @@ function show(req, res) {
 
         const movie = films[0];
         const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?';
-
+        const imgMovie = {
+            ...movie,
+            image: process.env.PUBLIC_PATH + "movies_cover/" + movie.title.toLowerCase().replaceAll(' ', '_') + ".jpg"
+        }
         connection.query(sqlReviews, [filmId], (err2, reviews) => {
             if (err2) {
                 console.error('Errore nella query SHOW reviews:', err2);
                 return res.status(500).json({ error: 'Errore interno al server' });
             }
-            res.status(200).json({ ...movie, reviews });
+            res.status(200).json({ ...imgMovie, reviews });
         });
     });
 }
